@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elige tu propia aventura</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #story {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Elige tu propia aventura</h1>
+    <div id="story"></div>
+    <div id="options"></div>
+
+    <script>
+        const storyData = {
+            
+                "start": {
+                    "text": "Eres Vito Kenny, un músico soñador en el corazón del Mississippi. Escuchas el lamento del blues resonar por el aire, y decides que es hora de seguir tu destino. Frente a ti tienes dos opciones: unirse a un grupo de músicos en una taberna local o seguir solo hacia el Delta para encontrar la fuente del blues.",
+                    "options": [
+                        { "text": "Ir a la taberna", "nextNode": "taberna" },
+                        { "text": "Seguir hacia el Delta", "nextNode": "delta" }
+                    ]
+                },
+                "taberna": {
+                    "text": "Entras a la taberna y encuentras a un grupo de músicos tocando. Te unes a ellos y pronto te das cuenta de que tienes una conexión única con su bajista y armonicista, quienes también buscan formar una banda llamada Los Infinitos.",
+                    "options": [
+                        { "text": "Proponer formar la banda", "nextNode": "formarBanda" },
+                        { "text": "Seguir solo tu camino", "nextNode": "seguirSolo" }
+                    ]
+                },
+                "delta": {
+                    "text": "Llegas al Delta del Mississippi, donde el agua parece susurrar secretos. Encuentras a una misteriosa guitarrista llamada Lena, quien menciona que 'Los Infinitos' buscan un vocalista para conquistar el blues.",
+                    "options": [
+                        { "text": "Unirte a Lena y Los Infinitos", "nextNode": "formarBanda" },
+                        { "text": "Continuar tu búsqueda solo", "nextNode": "seguirSolo" }
+                    ]
+                },
+                "formarBanda": {
+                    "text": "Los Infinitos nacen. Practican día y noche en el Delta, perfeccionando su sonido. Con su primer éxito, 'Shubirap', deciden iniciar una gira. Tienen dos opciones: comenzar en el mismo Delta o tomar un vuelo a un lugar exótico como el Delta del Tigre en Argentina.",
+                    "options": [
+                        { "text": "Comenzar en el Delta del Tigre", "nextNode": "deltaTigre" },
+                        { "text": "Quedarse en el Mississippi", "nextNode": "giraMississippi" }
+                    ]
+                },
+                "seguirSolo": {
+                    "text": "Decides explorar solo el mundo del blues, pero sin el apoyo de una banda, los desafíos se vuelven insuperables. Vuelves al principio de tu viaje, reconociendo que necesitas a otros para llegar lejos. Fin de la aventura.",
+                    "options": [
+                        { "text": "Volver a empezar", "nextNode": "start" }
+                    ]
+                },
+                "deltaTigre": {
+                    "text": "Llegan al Delta del Tigre en Argentina. Los locales quedan fascinados con su estilo de blues, y pronto logran fama. Desde ahí, deben elegir su próximo destino: España, donde el flamenco podría inspirar su música, o Egipto, donde planean tocar ante las pirámides.",
+                    "options": [
+                        { "text": "Viajar a España", "nextNode": "espana" },
+                        { "text": "Viajar a Egipto", "nextNode": "egipto" }
+                    ]
+                },
+                "giraMississippi": {
+                    "text": "Los Infinitos tocan en cada rincón del Mississippi, atrayendo a una gran cantidad de seguidores. Pronto reciben invitaciones internacionales. Tienen que elegir entre Japón, donde el blues tiene una audiencia inesperada, o México, donde buscan redescubrir sus raíces musicales.",
+                    "options": [
+                        { "text": "Viajar a Japón", "nextNode": "japon" },
+                        { "text": "Viajar a México", "nextNode": "mexico" }
+                    ]
+                },
+                "espana": {
+                    "text": "En España, Los Infinitos colaboran con músicos de flamenco, creando una versión inolvidable de 'Shubirap'. El público en Sevilla no deja de aplaudir, y tienen dos opciones: seguir por Europa o regresar a América para solidificar su estilo.",
+                    "options": [
+                        { "text": "Seguir por Europa", "nextNode": "egipto" },
+                        { "text": "Regresar a América", "nextNode": "america" }
+                    ]
+                },
+                "egipto": {
+                    "text": "De casualidad, llegaste a Egipto. En Egipto, tocan a la sombra de las pirámides bajo un cielo estrellado. La mística del lugar inspira a Vito a explorar los tonos hipnóticos del blues. Durante el concierto, un productor japonés se interesa por su música y los invita a Japón.",
+                    "options": [
+                        { "text": "Aceptar la invitación a Japón", "nextNode": "japon" },
+                        { "text": "Seguir con la gira en otro país", "nextNode": "otroPais" }
+                    ]
+                },
+                "america": {
+                    "text": "En américa, la colaboración con Javier resulta en una versión inolvidable de 'Shubirap', mezclando flamenco y blues. La canción se convierte en un éxito instantáneo en Europa, y reciben una invitación para una gira en Asia. El siguiente destino es China, donde se enfrentarán a una audiencia desconocida.",
+                    "options": [
+                        { "text": "Ir a China", "nextNode": "china" },
+                        { "text": "Volver a casa y descansar", "nextNode": "descanso" }
+                    ]
+                },
+                "conservarEstilo": {
+                    "text": "Deciden mantener su estilo de blues puro. Aunque algunos fans españoles querían una mezcla, Los Infinitos se mantienen fieles a sus raíces. Su autenticidad les gana admiradores en todo el mundo. Desde España, planean viajar a México para tocar en un famoso festival de blues.",
+                    "options": [
+                        { "text": "Viajar a México", "nextNode": "mexico" },
+                        { "text": "Tomarse un descanso y reflexionar", "nextNode": "descanso" }
+                    ]
+                },
+        "japon": {
+            "text": "Llegas a japón. En Japón, su blues recibe una cálida acogida, y 'Shubirap' resuena en festivales de Tokio y Kioto. Sin embargo, deben elegir si seguir en Asia para llegar a China, o volver al Delta para reconectar con sus raíces.",
+            "options": [
+                { "text": "Ir a China", "nextNode": "china" },
+                { "text": "Volver al Delta del Mississippi", "nextNode": "deltaFinal" }
+            ]
+        },
+        "descanso": {
+            "text": "No hay descanso para Vito y los infinitos. Continúan su gira por varios países, ganando popularidad en lugares como Grecia y Brasil. Pero el tiempo y la distancia les empiezan a pasar factura. Deciden si regresar al Mississippi o dar su último concierto en China.",
+            "options": [
+                { "text": "Regresar al Mississippi", "nextNode": "deltaFinal" },
+                { "text": "Dar el último concierto en China", "nextNode": "china" }
+            ]
+        },
+        "china": {
+            "text": "En China, Los Infinitos tocan en la Gran Muralla, dejando una huella inolvidable. Concluyen la gira sabiendo que han llevado el blues a lugares que jamás imaginaron.",
+            "options": [
+                { "text": "Volver al Mississippi y cerrar el ciclo", "nextNode": "deltaFinal" },
+                { "text": "Dar una gira en casa", "nextNode": "giraFinal" }
+            ]
+        },
+        "mexico": {
+            "text": "En México, tocan en un festival de blues en Oaxaca. Los Infinitos conquistan al público con su poderoso blues, y el éxito de 'Shubirap' cierra su gira en América. Reflexionan si es momento de una nueva aventura o si deberían regresar al Mississippi.",
+            "options": [
+                { "text": "Regresar al Mississippi", "nextNode": "deltaFinal" },
+                { "text": "Continuar con nuevos horizontes", "nextNode": "nuevaAventura" }
+            ]
+        },
+        "deltaFinal": {
+            "text": "De vuelta en el Mississippi, Los Infinitos sienten que su viaje ha sido un éxito y que el blues del delta vive en sus corazones. Vito mira el río con gratitud, cerrando el ciclo.",
+            "options": [
+                { "text": "Volver a empezar", "nextNode": "start" }
+            ]
+        },
+        "giraFinal": {
+            "text": "Deciden dar una última gira por su tierra natal, donde los fanáticos los aclaman por su travesía global. El blues del Delta sigue vivo, y Los Infinitos han marcado la historia del género.",
+            "options": [
+                { "text": "Volver a empezar", "nextNode": "start" }
+            ]
+        },
+        "nuevaAventura": {
+            "text": "Los Infinitos deciden reinventarse y explorar nuevos géneros, inspirados por todo lo que han aprendido. La aventura continúa.",
+            "options": [
+                { "text": "Volver a empezar", "nextNode": "start" }
+            ]
+        },
+
+    };
+
+        function showNode(nodeName) {
+            const node = storyData[nodeName];
+            document.getElementById('story').innerText = node.text;
+            
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            
+            node.options.forEach(option => {
+                const button = document.createElement('button');
+                button.innerText = option.text;
+                button.onclick = () => showNode(option.nextNode);
+                optionsDiv.appendChild(button);
+            });
+        }
+
+        // Iniciar la historia
+        showNode('start');
+    </script>
+</body>
+</html>
